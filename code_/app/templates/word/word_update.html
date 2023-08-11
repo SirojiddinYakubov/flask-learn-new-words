@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-center">Update</h1>
+    {% include 'parts/messages.html' %}
+    <form action="{{ url_for('word.update_word', word_id=word.id) }}" method="post">
+        <div class="mb-3">
+            <label for="title_en" class="form-label">Title (EN)</label>
+            <input type="text" class="form-control" value="{{ word.title_en }}" name="title_en" id="title_en">
+        </div>
+        <div class="mb-3">
+            <label for="title_uz" class="form-label">Nomi (UZ)</label>
+            <input type="text" class="form-control" value="{{ word.title_uz }}" name="title_uz" id="title_uz">
+        </div>
+
+        <div class="mb-3">
+            <label for="title_ru" class="form-label">Название (RU)</label>
+            <input type="text" class="form-control" value="{{ word.title_ru }}" name="title_ru" id="title_ru">
+        </div>
+        <button style="width: 100%" type="submit" class="btn btn-primary">Saqlash</button>
+    </form>
+{% endblock content %}

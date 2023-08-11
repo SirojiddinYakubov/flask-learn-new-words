@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+     {% include 'parts/messages.html' %}
+    <a href="{{ url_for('word.create_word') }}" class="btn btn-outline-secondary float-end">Create <i class="bi bi-file-earmark-plus-fill"></i></a>
+    <br>
+    <br>
+    <br>
+    <div class="table-responsive">
+        <table class="table table-sm table-borderless mb-0 table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Title (EN)</th>
+                <th>Nomi (UZ)</th>
+                <th>Название (RU)</th>
+                <th>Date Created</th>
+                <th>Date Updated</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for word in pagination.items %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ word.title_en }}</td>
+                    <td>{{ word.title_uz }}</td>
+                    <td>{{ word.title_ru }}</td>
+                    <td>{{ word.created_at }}</td>
+                    <td>{{ word.updated_at }}</td>
+                    <td>
+                        <a href="{{ url_for('word.update_word', word_id=word.id) }}" class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></a>
+                        <a href="{{ url_for('word.delete_word', word_id=word.id) }}" class="btn btn-outline-danger"><i class="bi bi-trash3"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'parts/pagination.html' %}
+{% endblock content %}
