@@ -52,7 +52,10 @@ class ConfigMeta(type):
                 value = attrs[key]
 
                 if isinstance(value, Callable):
-                    field_name, value = value(**dict(os.environ.items()), **env_file_data)
+                    updated = {}
+                    updated.update(os.environ.items())
+                    updated.update(env_file_data)
+                    field_name, value = value(**updated)
                     attrs.update({field_name: value})
                     check_types = [type(value)]
                 elif not isinstance(value, str):

@@ -7,3 +7,5 @@ flask-apispec
 marshmallow
 flask-marshmallow
 flask-moment
+flask-session
+flask-login

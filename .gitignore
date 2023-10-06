@@ -4,3 +4,4 @@ __pycache__
 .idea
 deploy/.env.dev
 deploy/.env.prod
+flask_session

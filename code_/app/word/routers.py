@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, Request, request, flash, redirect,
 # from flask_apispec import marshal_with, use_kwargs
 from sqlalchemy import func, or_
 from sqlalchemy.orm import load_only, noload
-
+from flask_login import login_required, current_user
 from app.core.database import db
 from app.core.utils import date_filter
 from app.models import Word
@@ -19,6 +19,7 @@ word_blueprint = Blueprint('word', __name__)
 @word_blueprint.route('/', methods=['GET'])
 # @marshal_with(ReadWordSchema(many=True))
 @date_filter
+@login_required
 def main(start, end):
     db_question = db.session.query(Word).filter(Word.created_at.between(start, end)).order_by(
         func.random()).first()
@@ -45,6 +46,7 @@ def main(start, end):
 
 @word_blueprint.route('/check-writing-word', methods=['GET', 'POST'])
 @date_filter
+@login_required
 def check_writing_word(start, end):
     db_question = db.session.query(Word).filter(Word.created_at.between(start, end)).order_by(
         func.random()).first()
@@ -84,6 +86,7 @@ def check_writing_word(start, end):
 
 @word_blueprint.route('/list/', methods=['GET'])
 @date_filter
+@login_required
 def list_words(start, end):
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
@@ -123,6 +126,7 @@ def list_words(start, end):
 
 
 @word_blueprint.route('/create', methods=['GET', 'POST'])
+@login_required
 def create_word():
     if request.method == 'POST':
         data = request.form
@@ -133,6 +137,7 @@ def create_word():
 
 
 @word_blueprint.route('/update/<int:word_id>', methods=['GET', 'POST'])
+@login_required
 def update_word(word_id):
     if request.method == 'POST':
         data = request.form
@@ -152,6 +157,7 @@ def update_word(word_id):
 
 
 @word_blueprint.route('/delete/<int:word_id>', methods=['GET'])
+@login_required
 def delete_word(word_id):
     flash('Object deleted successfully', 'success')
     Word.delete(word_id)

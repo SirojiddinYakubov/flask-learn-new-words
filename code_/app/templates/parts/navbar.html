@@ -14,30 +14,48 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('word.list_words') }}">Word list</a>
                 </li>
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('word.check_writing_word') }}">Check Writing Word</a>
                 </li>
-{#                <li class="nav-item dropdown">#}
-{#                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"#}
-{#                       aria-expanded="false">#}
-{#                        Dropdown#}
-{#                    </a>#}
-{#                    <ul class="dropdown-menu">#}
-{#                        <li><a class="dropdown-item" href="#">#</a></li>#}
-{#                        <li><a class="dropdown-item" href="#">Another action</a></li>#}
-{#                        <li>#}
-{#                            <hr class="dropdown-divider">#}
-{#                        </li>#}
-{#                        <li><a class="dropdown-item" href="#">Something else here</a></li>#}
-{#                    </ul>#}
-{#                </li>#}
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>#}
-{#                </li>#}
+                {#                <li class="nav-item dropdown">#}
+                {#                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"#}
+                {#                       aria-expanded="false">#}
+                {#                        Dropdown#}
+                {#                    </a>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        <li><a class="dropdown-item" href="#">#</a></li>#}
+                {#                        <li><a class="dropdown-item" href="#">Another action</a></li>#}
+                {#                        <li>#}
+                {#                            <hr class="dropdown-divider">#}
+                {#                        </li>#}
+                {#                        <li><a class="dropdown-item" href="#">Something else here</a></li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>#}
+                {#                </li>#}
+
             </ul>
+            <div class="navbar-end">
+                {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.login') }}" class="navbar-item">
+                        Login
+                    </a>
+                    <a href="{{ url_for('auth.signup') }}" class="navbar-item">
+                        Sign Up
+                    </a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.logout') }}" class="navbar-item">
+                        Logout
+                    </a>
+                {% endif %}
+            </div>
             <form class="d-flex" role="search" action="{{ url_for('word.list_words') }}">
 
-                <input class="form-control me-2" type="search" name="q" {% if request.args.get('q') %}value="{{ request.args.get('q') }}"{% endif %} placeholder="Search" aria-label="Search">
+                <input class="form-control me-2" type="search" name="q"
+                       {% if request.args.get('q') %}value="{{ request.args.get('q') }}"{% endif %} placeholder="Search"
+                       aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>
