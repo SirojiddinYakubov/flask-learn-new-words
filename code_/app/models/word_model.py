@@ -1,6 +1,6 @@
 import datetime
 
-from code_.app.core.database import db, session
+from app.core.database import db, session
 from .base_model import BaseModel
 
 

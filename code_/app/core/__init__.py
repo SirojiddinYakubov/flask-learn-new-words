@@ -1,3 +1,4 @@
+import os
 from types import NoneType
 from typing import Callable, Any
 
@@ -42,15 +43,16 @@ class ConfigMeta(type):
             except AttributeError:
                 check_types = [types]
 
-            # check value
-            if NoneType not in check_types and key not in attrs and not env_file_data.get(key):
+            # check value from env file or environment
+            if (NoneType not in check_types and key not in attrs) and not (
+                    env_file_data.get(key) or os.environ.get(key)):
                 raise ValueError(f"{key} value required. Please set value!")
 
             if key in attrs:
                 value = attrs[key]
 
                 if isinstance(value, Callable):
-                    field_name, value = value(**env_file_data)
+                    field_name, value = value(**dict(os.environ.items()), **env_file_data)
                     attrs.update({field_name: value})
                     check_types = [type(value)]
                 elif not isinstance(value, str):
@@ -89,5 +91,7 @@ def make_attr(field_name: str) -> Callable:
         def wrapper(**kwargs) -> (str, Any):
             result = func(values=kwargs)
             return field_name, result
+
         return wrapper
+
     return decorator

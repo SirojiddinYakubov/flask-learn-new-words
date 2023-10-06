@@ -6,3 +6,4 @@ psycopg2-binary
 flask-apispec
 marshmallow
 flask-marshmallow
+flask-moment

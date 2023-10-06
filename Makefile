@@ -20,3 +20,9 @@ alembic-revision:
 	flask db revision -d code_/alembic --autogenerate -m '$(ARGS)'
 alembic-downgrade:
 	flask db downgrade -d code_/alembic
+docker-build:
+	docker compose -f deploy/docker-compose.yml --env-file=deploy/.env.prod build
+docker-up:
+	docker compose -f deploy/docker-compose.yml --env-file=deploy/.env.prod up -d --build
+docker-down:
+	docker compose -f deploy/docker-compose.yml --env-file=deploy/.env.prod down

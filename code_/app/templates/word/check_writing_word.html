@@ -6,22 +6,26 @@
 
     <div class="card" style="width: 100%;">
         <div class="card-header" data-question-id="{{ question.id }}">
-            <h1 style="width: auto">{{ question.title }}</h1> ushbu so'zning juftini toping
+            <h1 style="width: auto">{{ question.title }}</h1> ushbu so'zning yozilishini kiriting
         </div>
-
-        <ul class="list-group list-group-flush">
-            {% for answer in answers %}
-                <li class="list-group-item" aria-current="true" onclick="select_li(this)" style="cursor: pointer">
-                    <h2 id="{{ answer.id }}">
-                        {{ answer.title_en }}{{ answer.title_ru }}{{ answer.title_uz }}</h2>
-                </li>
-            {% endfor %}
-        </ul>
+        <form class="input-group input-group-lg" method="post">
+            <span class="input-group-text" id="inputGroup-sizing-lg">EN</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" autofocus
+                    {% if is_correct is not none and is_correct %}
+                   value="{{ word }}"
+                   style="background-color: #78ff73"
+                    {% elif is_correct is not none and not is_correct %}
+                   style="background-color: #ff5e67"#}
+                   value="{{ word }}"
+                    {% endif %}
+                   name="word" id="word" aria-describedby="inputGroup-sizing-lg">
+            <input type="hidden" name="question_id" value="{{ question.id }}">
+            <button class="btn btn-outline-primary" type="submit">check</button>
+        </form>
     </div>
 
-
-    <a href="{{ url_for('word.main') }}?{{ request.query_string.decode() }}" class="btn btn-outline-info mt-5"
-       style="width: 100%;">
+    <a href="{{ url_for('word.check_writing_word') }}?{{ request.query_string.decode() }}"
+       class="btn btn-outline-info mt-5" style="width: 100%;">
         <svg fill="#000000" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
              xmlns:xlink="http://www.w3.org/1999/xlink"
              viewBox="0 0 489.645 489.645" xml:space="preserve">
@@ -35,23 +39,8 @@
         </svg>
     </a>
 
+
     <script>
-
-        function select_li(elem) {
-            let answerInput = elem.firstElementChild
-            answerInput.checked = true
-
-            let questionId = "{{ question.id }}"
-            let answerId = answerInput.getAttribute("id")
-
-            if (questionId === answerId) {
-                elem.style.backgroundColor = "#58e370"
-            } else {
-                elem.style.backgroundColor = "#e35865"
-            }
-            console.log(questionId, answerId)
-        }
-
 
         document.addEventListener("keydown", keyDownTextField, false);
         let word = document.getElementById('word')
@@ -61,8 +50,10 @@
         function keyDownTextField(e) {
             var keyCode = e.keyCode;
             if (keyCode == 91) {
-                window.location.href = `{{ url_for('word.main') }}?${query}`
+                window.location.href = `{{ url_for('word.check_writing_word') }}?${query}`
+                {#window.location.reload()#}
             }
         }
+
     </script>
 {% endblock content %}

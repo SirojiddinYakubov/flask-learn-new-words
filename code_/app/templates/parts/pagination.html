@@ -1,21 +1,24 @@
 <nav aria-label="Page navigation example" class="mt-5 h-100 d-flex justify-content-center">
-{#    <select name="per_page" class="form-select" style="width: 5%" id="">#}
-{#        <option value="5">5</option>#}
-{#        <option value="10">10</option>#}
-{#        <option value="15">15</option>#}
-{#        <option value="20">20</option>#}
-{#    </select>#}
+    {#    <select name="per_page" class="form-select" style="width: 5%" id="">#}
+    {#        <option value="5">5</option>#}
+    {#        <option value="10">10</option>#}
+    {#        <option value="15">15</option>#}
+    {#        <option value="20">20</option>#}
+    {#    </select>#}
     <ul class="pagination">
         <li class="page-item">
             <a class="page-link {% if not pagination.has_prev %}disabled{% endif %}"
-               href="{{ url_for('word.list_words', page=pagination.prev_num) }}" aria-label="Previous">
+               href="{{ url_for('word.list_words', page=pagination.prev_num, start=request.args.get('start'), end=request.args.get('end')) }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
         {% for number in pagination.iter_pages() %}
-            {% if pagination.page != number %}
-                <li class="page-item"><a class="page-link"
-                                         href="{{ url_for('word.list_words', page=number) }}">{{ number }}</a></li>
+            {% if not number %}
+                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+            {% elif pagination.page != number %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('word.list_words', page=number, start=request.args.get('start'), end=request.args.get('end')) }}">{{ number or "..." }}</a>
+                </li>
             {% else %}
                 <li class="page-item active"><a class="page-link" href="#">{{ number }}</a></li>
             {% endif %}
@@ -23,10 +26,9 @@
 
         <li class="page-item">
             <a class="page-link {% if not pagination.has_next %}disabled{% endif %}"
-               href="{{ url_for('word.list_words', page=pagination.next_num) }}" aria-label="Next">
+               href="{{ url_for('word.list_words', page=pagination.next_num, start=request.args.get('start'), end=request.args.get('end')) }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
     </ul>
 </nav>
-

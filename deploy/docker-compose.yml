@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  word-db:
+    container_name: word-db
+    restart: always
+    image: postgres:15-bullseye
+    env_file:
+      - .env.prod
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_HOST_AUTH_METHOD=md5
+    volumes:
+      - pgdata:/var/lib/postgresql/data:rw
+    expose:
+      - 5432
+  word-web:
+    container_name: word-web
+    restart: always
+    image: word-web:latest
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    volumes:
+      - ../code_:/code_
+    ports:
+      - "5000:5000"
+    depends_on:
+      - word-db
+    env_file:
+      - .env.prod
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=word-db
+      - DATABASE_PORT=${DATABASE_PORT}
+      - TZ=Asia/Tashkent
+volumes:
+  pgdata:
+    name: word-data
