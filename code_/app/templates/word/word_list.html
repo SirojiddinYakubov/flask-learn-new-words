@@ -4,6 +4,8 @@
     {% include 'parts/messages.html' %}
     {% include 'parts/filter_block.html' %}
 
+    <a href="{{ url_for('word.report_for_mark', start=request.args.get('start'), end=request.args.get('end')) }}" class="btn btn-outline-light">Report All</a>
+    <a href="{{ url_for('word.report_for_learn', start=request.args.get('start'), end=request.args.get('end')) }}" class="btn btn-outline-light">Report Selected</a>
     <a href="{{ url_for('word.create_word') }}" class="btn btn-outline-secondary float-end">Create <i
             class="bi bi-file-earmark-plus-fill"></i></a>
     <br>

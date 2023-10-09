@@ -43,6 +43,8 @@ class Config(metaclass=ConfigMeta):
             DATABASE_NAME=values.get("DATABASE_NAME"),
         )
 
+    BASE_DIR: str = BASE_DIR
+
     class Meta:
         env_file = ENV_FILE_PATH
 

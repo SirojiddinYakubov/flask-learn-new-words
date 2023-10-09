@@ -1,8 +1,12 @@
 import datetime
+import pathlib
 import random
 from datetime import date, timedelta
+from io import BytesIO
 
-from flask import Blueprint, render_template, Request, request, flash, redirect, url_for
+import flask
+from docx import Document
+from flask import Blueprint, render_template, Request, request, flash, redirect, url_for, send_file
 # from flask_apispec import marshal_with, use_kwargs
 from sqlalchemy import func, or_
 from sqlalchemy.orm import load_only, noload
@@ -10,6 +14,7 @@ from flask_login import login_required, current_user
 from app.core.database import db
 from app.core.utils import date_filter
 from app.models import Word
+from docxtpl import DocxTemplate
 
 # from code_.app.schemas.word_schema import ReadWordSchema, CreateWordSchema, UpdateWordSchema
 
@@ -162,3 +167,51 @@ def delete_word(word_id):
     flash('Object deleted successfully', 'success')
     Word.delete(word_id)
     return redirect(url_for('word.list_words'))
+
+
+@word_blueprint.route('/report-for-mark', methods=["GET"])
+@date_filter
+@login_required
+def report_for_mark(start, end):
+    from code_ import app
+    words = Word.query.filter(Word.created_at.between(start, end))
+    words_list = [w.title_en.split("[")[0].rstrip() for w in words]
+    random.shuffle(words_list)
+    doc = DocxTemplate(app.static_folder + "/doc/report_for_mark.docx")
+    context = {
+        "words": words_list
+    }
+    doc.render(context)
+    f = BytesIO()
+    # do staff with document
+    doc.save(f)
+    f.seek(0)
+    return send_file(
+        f,
+        as_attachment=True,
+        download_name='report_for_mark.docx'
+    )
+
+
+@word_blueprint.route('/report-for-learn', methods=["GET"])
+@date_filter
+@login_required
+def report_for_learn(start, end):
+    from code_ import app
+    words = Word.query.filter(Word.created_at.between(start, end))
+    iter = words.all()
+    random.shuffle(iter)
+    doc = DocxTemplate(app.static_folder + "/doc/report_for_learn.docx")
+    context = {
+        "words": iter
+    }
+    doc.render(context)
+    f = BytesIO()
+    # do staff with document
+    doc.save(f)
+    f.seek(0)
+    return send_file(
+        f,
+        as_attachment=True,
+        download_name='report_for_learn.docx'
+    )

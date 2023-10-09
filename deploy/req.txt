@@ -9,3 +9,4 @@ flask-marshmallow
 flask-moment
 flask-session
 flask-login
+python-docx

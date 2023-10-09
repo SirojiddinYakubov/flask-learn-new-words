@@ -2,14 +2,16 @@ from flask import Flask
 from app.models import *  # noqa
 from app.core.config import Config, BASE_DIR, config
 from app.core.database import db, migrate, ma, session
-from app.word.routers import word_blueprint
+
 from flask_moment import Moment
 from flask_session import Session
 from flask_login import LoginManager
 
 from auth.routers import auth_blueprint
+from word.routers import word_blueprint
 
 app = Flask(__name__, template_folder=f'{BASE_DIR}/code_/app/templates', static_folder=f'{BASE_DIR}/code_/app/static')
+
 moment = Moment()
 sess = Session()
 app.config.from_object(Config)
