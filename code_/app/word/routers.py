@@ -6,7 +6,7 @@ from io import BytesIO
 
 import flask
 from docx import Document
-from flask import Blueprint, render_template, Request, request, flash, redirect, url_for, send_file
+from flask import Blueprint, render_template, Request, request, flash, redirect, url_for, send_file, current_app
 # from flask_apispec import marshal_with, use_kwargs
 from sqlalchemy import func, or_
 from sqlalchemy.orm import load_only, noload
@@ -173,11 +173,10 @@ def delete_word(word_id):
 @date_filter
 @login_required
 def report_for_mark(start, end):
-    from code_ import app
     words = Word.query.filter(Word.created_at.between(start, end))
     words_list = [w.title_en.split("[")[0].rstrip() for w in words]
     random.shuffle(words_list)
-    doc = DocxTemplate(app.static_folder + "/doc/report_for_mark.docx")
+    doc = DocxTemplate(current_app.static_folder + "/doc/report_for_mark.docx")
     context = {
         "words": words_list
     }
@@ -197,11 +196,10 @@ def report_for_mark(start, end):
 @date_filter
 @login_required
 def report_for_learn(start, end):
-    from code_ import app
     words = Word.query.filter(Word.created_at.between(start, end))
     iter = words.all()
     random.shuffle(iter)
-    doc = DocxTemplate(app.static_folder + "/doc/report_for_learn.docx")
+    doc = DocxTemplate(current_app.static_folder + "/doc/report_for_learn.docx")
     context = {
         "words": iter
     }
